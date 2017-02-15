@@ -1,0 +1,38 @@
+apply plugin:'war'
+group 'dsoin'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+def tomcatHome = '/work/tomcat/webapps'
+
+resources
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDir 'src/'
+        }
+        resources {
+            srcDir 'web'
+        }
+    }
+}
+
+dependencies {
+
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.6.RELEASE'
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+    //compile 'javax.servlet:jstl:3.1.0'
+}
+war {
+    classpath configurations.runtime
+}
+
+task deployWar(type:Copy, dependsOn: 'war') {
+    from war.archivePath into tomcatHome
+}
